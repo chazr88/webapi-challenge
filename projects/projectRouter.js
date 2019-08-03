@@ -23,7 +23,7 @@ router.get("/:id", async (req, res) => {
         if (project) {
             res.status(200).json(project);
         } else {
-            res.status(404).json({ message: "project not found" });
+            res.status(404).json({ message: "Project not found" });
         }
     } catch (error) {
         // log error to server
@@ -34,6 +34,23 @@ router.get("/:id", async (req, res) => {
     }
 });
 
+router.get("/:id/actions", async (req, res) => {
+    try {
+        const actions = await projectData.getProjectActions(req.params.id);
+
+        if (actions) {
+            res.status(200).json(actions);
+        } else {
+            res.status(404).json({ message: "Actions not found" });
+        }
+    } catch (error) {
+        // log error to server
+        console.log(error);
+        res.status(500).json({
+            message: "Error retrieving the db"
+        });
+    }
+});
 
 router.post("/", async (req, res) => {
     try {
@@ -46,5 +63,34 @@ router.post("/", async (req, res) => {
         });
     }
 });
+
+router.put("/:id", async (req, res) => {
+    try {
+        const project = await projectData.update(req.params.id, req.body);
+        if(project) {
+            res.status(200).json({ message: "Project updated successfully" });
+        } 
+    } catch (error) {
+        res.status(500).json({
+            message: "Error retrieving the db"
+        });
+    }
+});
+
+router.delete("/:id", async (req, res) => {
+    try {
+        const project = await projectData.remove(req.params.id);
+        if (project) {
+            res.status(200).json({ message: "Project removed" });
+        } else {
+            res.status(400).json({ message: "Project could not be deleted" });
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: "Error retrieving the db"
+        });
+    }
+});
+ 
 
 module.exports = router;

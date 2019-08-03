@@ -6,7 +6,7 @@ const server = express();
 
 server.use(express.json())
 server.use('/api/project', projectRouter);
-server.use('/api/action', actionRouter);
+server.use('/api/actions', actionRouter);
 
 server.get('/', (req, res) => {
     res.send("<h1>WEB API SPRINT!</h1>")
